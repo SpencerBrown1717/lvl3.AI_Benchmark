@@ -1,2 +1,615 @@
-# LVL3.AI_Benchmark
-Cross vertical Agentic workflow 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LVL3.AI - GAIA Benchmark</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Premium Chart Styles */
+        :root {
+            --primary-blue: #0d204a;
+            --primary-blue-light: #162f66;
+            --light-blue: #3a5bb9;
+            --accent-gold: #ffd700;
+            --accent-gold-light: #ffe44d;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0a1732 100%);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* Benchmark Chart */
+        .benchmark-section {
+            margin: 40px auto;
+            max-width: 1000px;
+            background: linear-gradient(160deg, rgba(30, 50, 95, 0.7) 0%, rgba(10, 25, 65, 0.9) 100%);
+            border-radius: 15px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 
+                         0 0 120px rgba(59, 109, 227, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .benchmark-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233a5bb9' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .glow-effect {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0) 70%);
+            top: -150px;
+            right: -150px;
+            border-radius: 50%;
+            z-index: -1;
+            animation: glow-move 10s infinite alternate ease-in-out;
+        }
+        
+        @keyframes glow-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100px, 100px); }
+        }
+        
+        .benchmark-title {
+            text-align: center;
+            font-size: 2.6rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--accent-gold);
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .benchmark-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,1) 50%, rgba(255,215,0,0) 100%);
+        }
+        
+        .benchmark-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+        
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3), 
+                        0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 15px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .legend-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .legend-item[data-company="manus"] .legend-color {
+            background: linear-gradient(45deg, #000, #333);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+        
+        .legend-item[data-company="openai"] .legend-color {
+            background: linear-gradient(45deg, #777, #aaa);
+        }
+        
+        .legend-item[data-company="sota"] .legend-color {
+            background: linear-gradient(45deg, #aaa, #ddd);
+        }
+        
+        .legend-item[data-company="lvl3"] .legend-color {
+            background: linear-gradient(45deg, #d4af37, var(--accent-gold));
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .chart-container {
+            position: relative;
+            padding: 20px 0;
+            margin-top: 30px;
+        }
+        
+        .y-axis-label {
+            position: absolute;
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            font-weight: bold;
+            opacity: 0.9;
+            color: var(--accent-gold);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            font-size: 1.1rem;
+        }
+        
+        .bar-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 28px;
+            height: 65px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .bar-container:hover {
+            transform: translateX(10px) scale(1.01);
+        }
+        
+        .bar-container::after {
+            content: '';
+            position: absolute;
+            left: 240px;
+            right: 0;
+            bottom: -14px;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.05) 100%);
+        }
+        
+        .bar-container:last-child::after {
+            display: none;
+        }
+        
+        .bar-label {
+            width: 220px;
+            text-align: right;
+            padding-right: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+        
+        .bar-container:hover .bar-label {
+            opacity: 1;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        .bar-outer {
+            flex-grow: 1;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        .bar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 20px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            transition: width 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 40%;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.1) 100%);
+        }
+        
+        .bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            filter: blur(5px);
+        }
+        
+        .manus-bar {
+            background: linear-gradient(90deg, #333333 0%, #000000 100%);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            width: 0%;
+        }
+        
+        .openai-bar {
+            background: linear-gradient(90deg, #aaaaaa 0%, #777777 100%);
+            width: 0%;
+        }
+        
+        .sota-bar {
+            background: linear-gradient(90deg, #dddddd 0%, #aaaaaa 100%);
+            width: 0%;
+        }
+        
+        .lvl3-bar {
+            background: linear-gradient(90deg, var(--accent-gold-light) 0%, #d4af37 100%);
+            color: var(--primary-blue);
+            font-weight: bold;
+            width: 0%;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .x-axis {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 240px;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .x-axis::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -10px;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.2) 0%, 
+                rgba(255,255,255,0.05) 100%);
+        }
+        
+        .x-tick {
+            position: relative;
+            padding-top: 10px;
+        }
+        
+        .x-tick::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .x-axis-label {
+            text-align: center;
+            margin-top: 30px;
+            font-weight: bold;
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .benchmark-note {
+            text-align: center;
+            margin-top: 40px;
+            font-style: italic;
+            opacity: 0.8;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Animation triggers */
+        .animate-bars {
+            animation: none;
+        }
+
+        .animate-bars .manus-bar {
+            width: 57.7%;
+            transition-delay: 0.5s;
+        }
+        
+        .animate-bars .openai-bar {
+            width: 47.6%;
+            transition-delay: 0.9s;
+        }
+        
+        .animate-bars .sota-bar {
+            width: 42.3%;
+            transition-delay: 1.3s;
+        }
+        
+        .animate-bars .lvl3-bar {
+            width: 30.7%;
+            transition-delay: 1.7s;
+        }
+        
+        .lvl3-highlight {
+            color: var(--accent-gold);
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .lvl3-highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-gold);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            opacity: 0.7;
+        }
+        
+        .percentage-indicator {
+            position: absolute;
+            top: -25px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 5px;
+            padding: 3px 8px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .bar-container:hover .percentage-indicator {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Year marks */
+        .year-marker {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Highlight effect */
+        .highlight-lvl3 .bar-container:not(:nth-child(4)) {
+            opacity: 0.5;
+        }
+        
+        .highlight-lvl3 .bar-container:nth-child(4) {
+            transform: translateX(10px) scale(1.02);
+        }
+        
+        /* Future Goal Marker */
+        .future-goal {
+            position: absolute;
+            right: 20px;
+            width: 58%;
+            top: 50%;
+            height: 2px;
+            border-top: 2px dashed var(--accent-gold);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .bar-container:nth-child(4):hover .future-goal {
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .benchmark-section {
+                padding: 30px 20px;
+            }
+            
+            .bar-label {
+                width: 150px;
+                font-size: 0.9rem;
+            }
+            
+            .bar {
+                font-size: 1rem;
+                padding-right: 10px;
+            }
+            
+            .x-axis {
+                margin-left: 170px;
+            }
+            
+            .chart-legend {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- GAIA Benchmark Chart -->
+        <div class="benchmark-section">
+            <div class="glow-effect"></div>
+            <div class="year-marker">Q1 2025</div>
+            
+            <div class="benchmark-title">GAIA Benchmark</div>
+            <div class="benchmark-subtitle">Current performance comparison on the industry-standard Level 3 agent benchmark for autonomous AI systems</div>
+            
+            <div class="chart-legend">
+                <div class="legend-item" data-company="manus">
+                    <div class="legend-color"></div>
+                    <div>manus.ai (pass@1)</div>
+                </div>
+                <div class="legend-item" data-company="openai">
+                    <div class="legend-color"></div>
+                    <div>OpenAI Deep Research (pass@1)</div>
+                </div>
+                <div class="legend-item" data-company="sota">
+                    <div class="legend-color"></div>
+                    <div>Previous SOTA</div>
+                </div>
+                <div class="legend-item" data-company="lvl3">
+                    <div class="legend-color"></div>
+                    <div>LVL3.AI</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="y-axis-label">Model Performance</div>
+                
+                <div class="bar-container">
+                    <div class="bar-label">manus.ai (pass@1)</div>
+                    <div class="bar-outer">
+                        <div class="bar manus-bar">57.7%</div>
+                    </div>
+                    <div class="percentage-indicator">57.7%</div>
+                </div>
+                
+                <div class="bar-container">
+                    <div class="bar-label">OpenAI Deep Research (pass@1)</div>
+                    <div class="bar-outer">
+                        <div class="bar openai-bar">47.6%</div>
+                    </div>
+                    <div class="percentage-indicator">47.6%</div>
+                </div>
+                
+                <div class="bar-container">
+                    <div class="bar-label">Previous SOTA</div>
+                    <div class="bar-outer">
+                        <div class="bar sota-bar">42.3%</div>
+                    </div>
+                    <div class="percentage-indicator">42.3%</div>
+                </div>
+                
+                <div class="bar-container">
+                    <div class="bar-label"><span class="lvl3-highlight">LVL3.AI</span></div>
+                    <div class="bar-outer">
+                        <div class="bar lvl3-bar">30.7%</div>
+                        <div class="future-goal"></div>
+                    </div>
+                    <div class="percentage-indicator">30.7% (Q1 2025)</div>
+                </div>
+                
+                <div class="x-axis">
+                    <div class="x-tick">0.3</div>
+                    <div class="x-tick">0.4</div>
+                    <div class="x-tick">0.5</div>
+                    <div class="x-tick">0.6</div>
+                </div>
+                
+                <div class="x-axis-label">Success Rate (pass@1)</div>
+            </div>
+            
+            <div class="benchmark-note">Source: GAIA Benchmark Q1 2025 Evaluation — Updated April 2025</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger bar animations after page load
+            setTimeout(function() {
+                document.querySelector('.chart-container').classList.add('animate-bars');
+            }, 500);
+            
+            // Add interactivity to legend items
+            const legendItems = document.querySelectorAll('.legend-item');
+            legendItems.forEach(item => {
+                item.addEventListener('mouseover', function() {
+                    const company = this.getAttribute('data-company');
+                    if (company === 'lvl3') {
+                        document.querySelector('.chart-container').classList.add('highlight-lvl3');
+                    }
+                });
+                
+                item.addEventListener('mouseout', function() {
+                    document.querySelector('.chart-container').classList.remove('highlight-lvl3');
+                });
+            });
+            
+            // Add another subtle animation
+            const glow = document.querySelector('.glow-effect');
+            document.addEventListener('mousemove', function(e) {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                glow.style.transform = `translate(${-150 + x * 100}px, ${-150 + y * 100}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
